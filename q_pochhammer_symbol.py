@@ -4,10 +4,10 @@ https://en.wikipedia.org/wiki/Q-Pochhammer_symbol
 
 
 def qPochhammer(a, q, n):
-    if n <= 0:
+    if n < 1:
         return 1
-    product = 1 - a
-    for k in range(1, n):
+    product = 1
+    for k in range(n):
         product *= (1 - a * q**k)
     return product
 
@@ -26,7 +26,7 @@ def binomialCoefficient(n, k):
     return r
 
 
-# このやり方ではだめ。
+# これはだめ。
 def mockModularOrder2A(q):
     if q <= 0:
         return 0
@@ -34,9 +34,25 @@ def mockModularOrder2A(q):
         return 1
     sum = 0
     qq = q * q
-    for n in range(10):
-        sum += q**(n + 1) * qPochhammer(-qq, qq, n) / qPochhammer(q, qq, n + 1)
+    for n in range(100):
+        sum += (q**(n + 1)) * qPochhammer(-qq, qq, n) / \
+            qPochhammer(q, qq, n + 1)
     return sum
 
-for i in range(10):
+for i in range(32):
     print(mockModularOrder2A(i))
+
+print("qPochhammer Test:")
+a = 4
+q = 11
+print("a = " + str(a))
+print("q = " + str(q))
+print("n = 1")
+print(qPochhammer(a, q, 1) - (1 - a))
+print("n = 2")
+print(qPochhammer(a, q, 2) - (1 - a) * (1 - a * q**1))
+print("n = 3")
+print(qPochhammer(a, q, 3) - (1 - a) * (1 - a * q**1) * (1 - a * q**2))
+print("n = 4")
+print(qPochhammer(a, q, 4) - (1 - a) * (1 - a * q**1)
+      * (1 - a * q**2) * (1 - a * q**3))
